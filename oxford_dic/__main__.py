@@ -39,15 +39,16 @@ def main():
             logger.error(f"{request.status_code}: {request.text}")
 
     result_json = loads(result_text)
+    tnl = '\n\t'
     for entry in result_json['results'][0]['lexicalEntries'][0]['entries']:
         print(args.word[0])
         print(len(args.word[0]) * '_')
         print("\nEtymology:")
         print(f"\t{entry['etymologies'][0]}")
         print("\nDefinition:")
-        print(f"\t{entry['senses'][0]['definitions'][0]}")
+        print(f"\t{tnl.join([definition for definition in entry['senses'][0]['definitions']])}")
         print("\nExamples:")
-        print(f"\t{entry['senses'][0]['examples'][0]['text']}")
+        print(f"\t{tnl.join([example['text'] for example in entry['senses'][0]['examples']])}")
 
 
 if __name__ == '__main__':
