@@ -26,7 +26,7 @@ def main():
 
     try:
         prepared_url = f"https://od-api.oxforddictionaries.com:443/api/v2/" \
-                   f"entries/en-gb/{args.word[0].lower()}"
+                       f"entries/en-gb/{args.word[0].lower()}"
     except KeyError:
         logger.error("Argument 'word' is required.")
         return -1
@@ -34,21 +34,34 @@ def main():
     with get(prepared_url,
              headers={"app_id": app_id, "app_key": api_key}) as request:
         if request.ok:
-            result_text =request.text
+            result_text = request.text
         else:
             logger.error(f"{request.status_code}: {request.text}")
 
     result_json = loads(result_text)
     tnl = '\n\t'
-    for entry in result_json['results'][0]['lexicalEntries'][0]['entries']:
-        print(args.word[0])
-        print(len(args.word[0]) * '_')
-        print("\nEtymology:")
-        print(f"\t{entry['etymologies'][0]}")
-        print("\nDefinition:")
-        print(f"\t{tnl.join([definition for definition in entry['senses'][0]['definitions']])}")
-        print("\nExamples:")
-        print(f"\t{tnl.join([example['text'] for example in entry['senses'][0]['examples']])}")
+    try:
+        for entry in result_json['results'][0]['lexicalEntries'][0]['entries']:
+            print(args.word[0])
+            print(len(args.word[0]) * '_')
+            print("\nEtymology:")
+            try:
+                print(f"\t{entry['etymologies'][0]}")
+            except KeyError:
+                print("\tNo etymology found")
+            print("\nDefinition:")
+            try:
+                print(f"\t{tnl.join([definition for definition in entry['senses'][0]['definitions']])}")
+            except KeyError:
+                print("\tNo definition found")
+            print("\nExamples:")
+            try:
+                print(f"\t{tnl.join([example['text'] for example in entry['senses'][0]['examples']])}")
+            except KeyError:
+                print("\tNo examples found.")
+    except KeyError:
+        print(f"Word {args.word[0]} not found in Oxford dictionary")
+        return -1
 
 
 if __name__ == '__main__':
