@@ -35,8 +35,12 @@ def main():
              headers={"app_id": app_id, "app_key": api_key}) as request:
         if request.ok:
             result_text = request.text
+        elif request.status_code == 404:
+            print(f"Word {args.word[0]} no found in Oxford Dictionary")
+            retrun -1
         else:
             logger.error(f"{request.status_code}: {request.text}")
+            return -1
 
     result_json = loads(result_text)
     tnl = '\n\t'
