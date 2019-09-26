@@ -36,7 +36,7 @@ def main():
         if request.ok:
             result_text = request.text
         elif request.status_code == 404:
-            print(f"Word {args.word[0]} no found in Oxford Dictionary")
+            print(f"Word {args.word[0]} not found in Oxford Dictionary")
             return -1
         else:
             logger.error(f"{request.status_code}: {request.text}")
