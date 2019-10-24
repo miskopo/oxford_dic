@@ -5,7 +5,7 @@ with open("requirements.txt") as req_file:
 
 setup(
     name='oxford_dic',
-    version='1.0.3',
+    version='1.0.4',
     packages=['oxford_dic'],
     author="Michal Polovka",
     author_email="michal.polovka@gmail.com",
